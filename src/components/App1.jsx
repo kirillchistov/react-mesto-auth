@@ -5,7 +5,6 @@ import { Switch, Route, useHistory } from 'react-router-dom';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
-//  import PopupWithForm from './PopupWithForm';  //
 import ImagePopup from './ImagePopup';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
@@ -331,8 +330,10 @@ function App() {
   //  Вставляем компоненты Header, Main, Footer и компоненты попапов  //
   //  Внутри Main добавляем императивные обработчики  //
   //  Оборачиваем JSX в провайдер контекста с currentUser  //
-  //  Выносим JSX попапов в отдельные компоненты  //
-  
+  //  Добавили компонент InfoToolTip  //
+  //  Обернули Main в ProtectedRoute с доступом после логина  //
+
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="root">

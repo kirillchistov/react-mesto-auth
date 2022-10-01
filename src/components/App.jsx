@@ -106,7 +106,7 @@ function App() {
         if (!data.token) return;
         localStorage.setItem('jwt', data.token);
         setLoggedIn(true);
-        setMessage('Успешная авторизация');
+        setMessage('Вы успешно авторизовались');
         setIsPopupOpen(true);
         setTimeout(closeAllPopups, 3000);
         console.log(currentUser, email, data.token);
@@ -377,32 +377,25 @@ function App() {
           onLogout={handleLogout} 
         />
         <Switch>
-          <ProtectedRoute 
-            exact path="/" 
-            loggedIn={loggedIn}
-            component={Main}
-            onEditProfile={handleEditProfileClick}
-            onAddPlace={handleAddPlaceClick}
-            onEditAvatar={handleEditAvatarClick}
-            onCardClick={handleCardClick}
-            closePopup={closeAllPopups}
-            onCardLike={handleCardLike}
-            onCardDeleteClick={handleCardDeleteClick}
-            cards={cards}
-          >
-          </ProtectedRoute>
-          <Route path="/sign-up">
-            <Register
-              title="Регистрация"
-              buttonText="Зарегистрироваться"
-              onRegister={handleRegister}
+          <ProtectedRoute exact path="/" loggedIn={loggedIn}>
+            <Main
+              onEditProfile={handleEditProfileClick}
+              onAddPlace={handleAddPlaceClick}
+              onEditAvatar={handleEditAvatarClick}
+              onCardClick={handleCardClick}
+              closePopup={closeAllPopups}
+              onCardLike={handleCardLike}
+              onCardDeleteClick={handleCardDeleteClick}
+              cards={cards}
             />
-          </Route>
+          </ProtectedRoute>
           <Route path="/sign-in">
-            <Login 
-              title="Вход" 
-              buttonText="Войти" />
-              onLogin={handleLogin} 
+            <Login title="Вход" buttonText="Войти" onLogin={handleLogin} />
+          </Route>
+          <Route path="/sign-up">
+            <Register title="Регистрация" buttonText="Зарегистрироваться" 
+            onRegister={handleRegister}
+            />
           </Route>
         </Switch>
         <Footer />
