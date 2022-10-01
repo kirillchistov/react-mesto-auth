@@ -11,6 +11,7 @@ import App from './components/App';
 
 //  Импортируем функцию анализа эффективности работы приложения  //
 import reportWebVitals from './reportWebVitals';
+// import { HashRouter } from 'react-router-dom';  //
 
 //  Создаем корневой элемент и рендерим в него компонент приложения  //
 const root = ReactDOM.createRoot(document.getElementById('root'));

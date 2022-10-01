@@ -1,7 +1,6 @@
 //  Импортируем библиотеки, компоненты и утилиты  //
 import React, { useEffect, useState } from 'react';
 import { Switch, Route, useHistory } from 'react-router-dom';
-//  import { Redirect } from 'react-router-dom';  //
 
 import Header from './Header';
 import Main from './Main';
@@ -55,107 +54,22 @@ function App() {
   const [cardToDelete, setCardToDelete] = useState({});
   const [cards, setCards] = useState([]);
 
-  //  Функцию для роутинга пользователя после логина и выхода  //
+//  Функцию для роутинга пользователя после логина и выхода  //
   const history = useHistory();
 
-  //  Объект routes для хранения адресов роутов  //
-  /*  
+//  Объект routes для хранения адресов роутов  //
+/*  
   const routes = {
     homeRoute: '/',
     signIn: '/sign-in',
     signUp: '/sign-up',
   };
-  */ 
+*/ 
 
   //  Создаем переменную для проверки на наличие открытого попапа  //
-  const isOpen = isEditProfilePopupOpen || isEditAvatarPopupOpen || isAddPlacePopupOpen || isImagePopupOpen;
+  const isOpen = isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || isImagePopupOpen;
 
-
-  //  Хук для направления на главную после успешного логина  //
-  useEffect(() => {
-    if (!loggedIn) return;
-    history.push('/');
-  }, [loggedIn, history])
-
-  //  Хук с функцией проверки токена и логином пользователя в случае успеха  //
-  useEffect(() => {
-    const tokenCheck = () => {
-      if (!localStorage.getItem("jwt")) return;
-      const jwt = localStorage.getItem("jwt");
-      return auth
-        .getContent(jwt)
-        .then((data) => {
-          if (data) {
-            setEmail(data.email);
-            setLoggedIn(true);
-            history.push("/");
-          }
-        })
-        .catch((e) => {
-          console.log(`Ошибка проверки токена: ${e}`);
-        });
-    }  
-    tokenCheck();
-  }, [history]);
-
-  //  Обрабатываем авторизацию - сохраняем токен, сообщение, закрываем попап, шлем на главную  //
-  const handleLogin = (email, password) => {
-    setIsLoading(true);
-    auth.authorize(email, password)
-      .then((data) => {
-        if (!data.token) return;
-        localStorage.setItem('jwt', data.token);
-        setLoggedIn(true);
-        setMessage('Успешная авторизация');
-        setIsPopupOpen(true);
-        setTimeout(closeAllPopups, 3000);
-        console.log(currentUser, email, data.token);
-        history.push('/');
-      })
-      .catch(e => {
-        setLoggedIn(false);
-        setMessage('Что-то не так! Еще разок!');
-        setIsPopupOpen(true);
-        setTimeout(closeAllPopups, 3000);
-        console.log(`Ошибка авторизации: ${e}`);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      })
-  }
-
-  //  Обрабатываем регистрацию - сохраняем логин на сервере, закрываем попап, шлем на логин  //
-  const handleRegister = (email, password) => {
-    setIsLoading(true);
-    auth.register(email, password)
-      .then((res) => {
-        setLoggedIn(true);
-        setMessage('Успешная регистрация!');
-        setIsPopupOpen(true);
-        setTimeout(closeAllPopups, 3000);
-        history.push('/sign-in');
-      })
-      .catch(e => {
-        setLoggedIn(false);
-        setMessage('Что-то не так! Еще разок.');
-        setIsPopupOpen(true);
-        setTimeout(closeAllPopups, 3000);
-        console.log(`Ошибка регистрации: ${e}`);
-      })
-      .finally(() => {
-          setIsLoading(false);
-      })
-  }
-  
-  //  Создаем функцию логаута (удаляем токен из лок хранилища)  //
-  const handleLogout = () => {
-    localStorage.removeItem('jwt');
-    setLoggedIn(false);
-    setEmail('');
-    history.push('/sign-in');
-  }
-
-  //  Хук для получения профиля и карточек залогиненного юзера  //
+  //  Хук для работы с функцией проверки статуса логина, получаем профиль и карточки юзера  //
   useEffect(() => {
     loggedIn && 
       Promise.all([
@@ -165,10 +79,105 @@ function App() {
         .then(([currentUser, cards]) => {
           setCurrentUser(currentUser);
           setCards(cards);
-          history.push('/');
         })
-        .catch(e => console.log(`Ошибка первой загрузки: ${e}`))
+        .catch(err => console.log(`Ошибка первой загрузки: ${err}`));
   }, [loggedIn]);
+
+  //  Хук для направления на главную после успешного логина  //
+  useEffect(() => {
+    if (!loggedIn) return;
+    history.push('/');
+  }, [loggedIn, history])
+
+    //  Хук с функцией проверки токена и логином пользователя в случае успеха  //
+  useEffect(() => {
+      function tokenCheck() {
+        if (!localStorage.getItem("jwt")) return;
+        const jwt = localStorage.getItem("jwt");
+        return auth
+          .getContent(jwt)
+          .then(res => {
+              setEmail(res.data.email);
+              setLoggedIn(true);
+              history.push("/");
+          })
+          .catch(err => console.log(`Ошибка: ${err}`));
+      }  
+      tokenCheck();
+    }, [history]);
+
+  //  Обрабатываем авторизацию - сохраняем токен, сообщение, закрываем попап, шлем на главную  //
+  const handleLogin = (email, password) => {
+    setIsLoading(true);
+    auth.authorize(email, password)
+      .then((res) => {
+        if (!res.token) return;
+        localStorage.setItem('jwt', res.token);
+        setLoggedIn(true);
+        setMessage('Вы успешно авторизовались!');
+        setIsPopupOpen(true);
+//        setTimeout(closeAllPopups, 3000);  //
+        history.push('/');
+      })
+      .catch(err => {
+        setLoggedIn(false);
+        setMessage('Что-то пошло не так! Попробуйте еще раз!');
+        setIsPopupOpen(true);
+//        setTimeout(closeAllPopups, 3000);  //
+        console.log(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      })
+  }
+
+  //  Обрабатываем регистрацию - сохраняем логин на сервере, закрываем попап, шлем на логин  //
+  function handleRegister(email, password) {
+    setIsLoading(true);
+    auth.register(email, password)
+      .then((res) => {
+        setLoggedIn(true);
+        setMessage('Вы успешно зарегистрировались!');
+        setIsPopupOpen(true);
+//        setTimeout(closeAllPopups, 3000);  //
+        history.push('/sign-in');
+      })
+      .catch(error => {
+        setLoggedIn(false);
+        setMessage('то-то пошло не так! Попробуйте еще раз');
+        setIsPopupOpen(true);
+  //      setTimeout(closeAllPopups, 3000);  //
+        console.log(error);
+      })
+      .finally(() => {
+          setIsLoading(false);
+      })
+  }
+  
+  //  Создаем функцию логаута (удаляем токен из лок хранилища)  //
+  function handleLogout() {
+    localStorage.removeItem('jwt');
+    setLoggedIn(false);
+    setEmail('');
+    history.push('/sign-in');
+  }
+  
+
+  //  переносим эффект с API-запросом api.getCardList (getCards)  //
+  /*
+  const fetchCards = async () => {
+    try {
+      const res = await api.getCards();
+      setCards(res);
+    } catch (e) {
+      console.warn(e)
+    }
+  }
+
+  useEffect(() => {
+    fetchCards();
+  }, [])
+  */
 
   useEffect(() => {
     function closeByEscape(event) {
@@ -192,7 +201,7 @@ function App() {
         setCurrentUser(avatarChanged);
         closeAllPopups();
     } catch (e) {
-      console.log(`Ошибка обновления аватара: ${e}`);
+        console.warn(e)
     } finally {
       setIsLoading(false);
     }
@@ -208,20 +217,19 @@ function App() {
       setCurrentUser(changedProfile);
       closeAllPopups();
     } catch (e) {
-      console.log(`Ошибка обновления профиля: ${e}`);
+      console.warn(e);
     }
   }
   */
 
-  const handleUpdateUser = (obj) => {
+  function handleUpdateUser(obj) {
     setIsLoading(true);
     api.setProfile(obj)
       .then((res) => {
         setCurrentUser(res);
       })
       .then(() => closeAllPopups())
-      .catch((e) => console.log(`Ошибка обновления профиля: ${e}`))
-
+      .catch((e) => console.warn(e))
       .finally(() => {
         setIsLoading(false);
       });
@@ -234,7 +242,7 @@ function App() {
         setCards([newPlace, ...cards]);
         closeAllPopups();
     } catch(e) {
-      console.log(`Ошибка добавления новой карточки: ${e}`);
+        console.warn(e)
     } finally {
         setIsLoading(false);
     }
@@ -244,42 +252,16 @@ function App() {
   //  проверяем, есть ли уже лайк на этой карточке (isLiked)  //
     
   //  получаем через api данные пользователя и карточек //
-
+  //  с
   const handleCardLike = async (card) => {
     const isLiked = card.likes.some(i => i._id === currentUser._id);
     try {
         const resChangeLikeStatus = await api.changeLikeCardStatus(card, !isLiked);
         setCards((state) => state.map((c) => c._id === card._id ? resChangeLikeStatus : c));
-    } catch (e) {
-      console.log(`Ошибка обработки лайка: ${e}`);
+    } catch (error) {
+        console.warn(error);
     }
   }
-
-  //  Функция для обработки лайка до рефакторинга  //
-  /*    
-    const handleCardLike = (card) => {
-      const isLiked = card.likes.some((i) => i._id === currentUser._id);
-      if (isLiked) {
-        api
-          .deleteLike(card._id)
-          .then((newCard) => {
-            setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)));
-          })
-          .catch((e) => {
-            console.log(`Ошибка удаления лайка: ${e}`);
-          });
-      } else {
-        api
-          .addLike(card._id)
-          .then((newCard) => {
-            setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)));
-          })
-          .catch((e) => {
-            console.log(`Ошибка добавления лайка: ${e}`);
-          });
-      }
-    }
-  */
 
   const handleCardDelete = async (card) => {
     setIsLoading(true);
@@ -288,43 +270,26 @@ function App() {
         setCards((newArray) => newArray.filter((item) => card._id !== item._id))
         closeAllPopups();
     } catch (e) {
-      console.log(`Ошибка удаления карточки: ${e}`);
+        console.warn(e);
     } finally {
       setIsLoading(false);
     }
   }
 
-  //  хук для ассинхронного получения профиля  //
-  /* 
-  const fetchProfile = async () => {
+  const fetchData = async () => {
     try {
         const profileObject = await api.getProfile();
         setCurrentUser(profileObject);
-    } catch (e) {
-      console.log(`Ошибка получения данных профиля: ${e}`);
+    } catch (error) {
+        console.warn(error);
     }
   }
 
   useEffect(() => {
-    fetchProfile()
+    fetchData()
   }, [])
-  */
 
-  //  хук для ассинхронного получения карточек  //
-  /* 
-  const fetchCards = async () => {
-    try {
-      const res = await api.getCards();
-      setCards(res);
-    } catch (e) {
-      console.log(`Ошибка получения карточек: ${e}`);
-    }
-  }
 
-  useEffect(() => {
-    fetchCards();
-  }, [])
-  */
 
 
   //  Создаем императивные обработчики для кнопок открытия попапов  //
@@ -399,10 +364,7 @@ function App() {
             />
           </Route>
           <Route path="/sign-in">
-            <Login 
-              title="Вход" 
-              buttonText="Войти" />
-              onLogin={handleLogin} 
+            <Login onLogin={handleLogin} title="Вход" buttonText="Войти" />
           </Route>
         </Switch>
         <Footer />
@@ -416,18 +378,21 @@ function App() {
           isOpen={isEditProfilePopupOpen} 
           onClose={closeAllPopups}
           onUpdateUser={handleUpdateUser}
+//          isLoading={isLoading}   //
           isLoading={isLoading}
         />
         <AddPlacePopup 
           isOpen={isAddPlacePopupOpen} 
           onClose={closeAllPopups} 
           onAddPlace={handleAddPlace}
+//          isLoading={isLoading}   //
           isLoading={isLoading}
         />
         <EditAvatarPopup
           isOpen={isEditAvatarPopupOpen}
           onClose={closeAllPopups}
           onUpdateAvatar={handleAvatarUpdate}
+//          isLoading={isLoading}   //
           isLoading={isLoading}
         />
         <ImagePopup 
