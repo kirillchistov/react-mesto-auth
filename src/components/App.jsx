@@ -72,10 +72,14 @@ function App() {
 
 
   //  Хук для направления на главную после успешного логина  //
+  /* 
   useEffect(() => {
     if (!loggedIn) return;
     history.push('/');
+    console.log(currentUser, email, loggedIn);
+
   }, [loggedIn, history])
+  */
 
   //  Хук с функцией проверки токена и логином пользователя в случае успеха  //
   useEffect(() => {
@@ -99,6 +103,7 @@ function App() {
   }, [history]);
 
   //  Обрабатываем авторизацию - сохраняем токен, сообщение, закрываем попап, шлем на главную  //
+  //  Поправить текст на 'Вы успешно авторизовались' и 'Что-то пошло не так! Попробуйте ещё раз.'  //
   const handleLogin = (email, password) => {
     setIsLoading(true);
     auth.authorize(email, password)
@@ -106,17 +111,17 @@ function App() {
         if (!data.token) return;
         localStorage.setItem('jwt', data.token);
         setLoggedIn(true);
-        setMessage('Вы успешно авторизовались');
+        setMessage('Успешная авторизация');
+        console.log(currentUser, email, password, loggedIn);
         setIsPopupOpen(true);
-        setTimeout(closeAllPopups, 3000);
-        console.log(currentUser, email, data.token);
+        setTimeout(closeAllPopups, 12000);
         history.push('/');
       })
       .catch(e => {
         setLoggedIn(false);
-        setMessage('Что-то не так! Еще разок!');
+        setMessage('Что-то не так! Ещё раз.');
         setIsPopupOpen(true);
-        setTimeout(closeAllPopups, 3000);
+        setTimeout(closeAllPopups, 12000);
         console.log(`Ошибка авторизации: ${e}`);
       })
       .finally(() => {
@@ -125,6 +130,7 @@ function App() {
   }
 
   //  Обрабатываем регистрацию - сохраняем логин на сервере, закрываем попап, шлем на логин  //
+  //  Поправить текст на 'Вы успешно зарегистрировались' и 'Что-то пошло не так! Попробуйте ещё раз.'  //
   const handleRegister = (email, password) => {
     setIsLoading(true);
     auth.register(email, password)
@@ -137,7 +143,7 @@ function App() {
       })
       .catch(e => {
         setLoggedIn(false);
-        setMessage('Что-то не так! Еще разок.');
+        setMessage('Что-то не так! Ещё раз.');
         setIsPopupOpen(true);
         setTimeout(closeAllPopups, 3000);
         console.log(`Ошибка регистрации: ${e}`);
@@ -153,6 +159,7 @@ function App() {
     setLoggedIn(false);
     setEmail('');
     history.push('/sign-in');
+    console.log(`loggedIn: ${loggedIn}, jwt: ${localStorage.getItem("jwt")}`);
   }
 
   //  Хук для получения профиля и карточек залогиненного юзера  //
@@ -213,9 +220,10 @@ function App() {
   }
   */
 
-  const handleUpdateUser = (obj) => {
+  const handleUpdateUser = (name, about) => {
     setIsLoading(true);
-    api.setProfile(obj)
+    console.log(`handleUpdateUser obj: ${name}, ${about}, loggedIn: ${loggedIn}`);
+    api.setProfile(name, about)
       .then((res) => {
         setCurrentUser(res);
       })
@@ -377,7 +385,7 @@ function App() {
           onLogout={handleLogout} 
         />
         <Switch>
-          <ProtectedRoute exact path="/" loggedIn={loggedIn}>
+        <ProtectedRoute exact path="/" loggedIn={loggedIn}>
             <Main
               onEditProfile={handleEditProfileClick}
               onAddPlace={handleAddPlaceClick}
@@ -385,7 +393,7 @@ function App() {
               onCardClick={handleCardClick}
               closePopup={closeAllPopups}
               onCardLike={handleCardLike}
-              onCardDeleteClick={handleCardDeleteClick}
+              onCardDelete={handleCardDeleteClick}
               cards={cards}
             />
           </ProtectedRoute>

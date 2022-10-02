@@ -17,8 +17,9 @@ const EditProfilePopup = ({isOpen, onClose, onUpdateUser, isLoading}) => {
         setValues(currentUser);
     }, [currentUser, isOpen]);
 
-    function handleSubmit(event) {
+    const handleSubmit = (event) => {
         event.preventDefault();
+        console.log(values.name, values.about, currentUser)
         onUpdateUser(values.name, values.about);
     }
 
@@ -68,7 +69,7 @@ const EditProfilePopup = ({isOpen, onClose, onUpdateUser, isLoading}) => {
                 <input 
                     className={`popup__input popup__input_user_name ${errors.name ? 'popup__field-error_type' : ''}`}
                     type="text" 
-                    name="profileName" 
+                    name="edit-button" 
                     id="profile-name" 
                     placeholder="Введите имя пользователя" 
                     required 

@@ -1,23 +1,24 @@
 //  Импортируем библиотеки  //
 import React from 'react';
+//  import { useState, useEffect } from 'react';  //
 import { Switch, Route, NavLink } from 'react-router-dom';
 
-//  Импортируем логотип для вставки в src  //
+//  Импортируем логотип и бургер-меню для вставки в src  //
 import logo from '../images/logo-white.svg';
+//  import burger from '../images/header-menu.svg';  //
 
 //  Принимаем email и signOut, рендерим компонент JSX компонента шапки  //
-
-const Header = ({ email, signOut }) => {
+const Header = ({ loggedIn, email, onLogout }) => {
   return (
     <header className="header">
-      <img className="header__logo" src={logo} alt="Логотип проекта Место" />
+      <a href="#app" className="header__logo-link">
+        <img className="header__logo" src={logo} alt="Логотип проекта Mesto" />
+      </a>
       <div className="header__wrapper-text">
         <Switch>
-          <Route exact path="/">
+          <Route path="/">
             <p className="header__email">{email}</p>
-            <NavLink to="/sign-in" className="header__button" onClick={signOut}>
-              Выйти
-            </NavLink>
+            <NavLink to="/sign-out" className="header__button" onClick={onLogout}>Выйти</NavLink>
           </Route>
           <Route path="/sign-up">
             <NavLink to="/sign-in" className="header__button">

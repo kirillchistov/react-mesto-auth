@@ -24,7 +24,7 @@ function Register({ title, buttonText, onRegister }) {
         values={values}
         errors={errors}
       />
-      <NavLink className="login__form-link" to="/sign-in">
+      <NavLink className="login__form-link" activeClassName="login__form-link_active" to="/sign-in">
         Уже зарегистрированы? Войти
       </NavLink>
     </div>

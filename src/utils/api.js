@@ -9,7 +9,7 @@ export default class Api {
 
     //  Обрабатываем ответ сервера и, если не ОК, выводим реджектим с ошибкой  //
     _handleServerResponse(res) {
-        return res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`);
+        return res.ok ? res.json() : Promise.reject(`Ошибка ответа сервера: ${res.status}`);
     }
 
     //  Универсальный метод принимает урл и объект опций c хедерами  //
@@ -37,7 +37,7 @@ export default class Api {
     setProfile(obj) {
         return this._request(`${this._baseUrl}/users/me`, {
             method: "PATCH",
-            headers: this._headers,
+//            headers: this._headers,  //
             body: JSON.stringify({
                 name: obj.name,
                 about: obj.about,
