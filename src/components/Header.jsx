@@ -24,6 +24,7 @@ const Header = ({ loggedIn, email, onLogout }) => {
 
   const handleLogout = () => {
     setMenuOpened(false);
+    loggedIn = false;
     onLogout();
   };
 
@@ -31,9 +32,8 @@ const Header = ({ loggedIn, email, onLogout }) => {
   
   return (
     <header className="header">
-      <img className="header__logo" src={logo} alt="Логотип проекта Mesto" />
-
-      <div className="header__wrapper-text">
+      <div className="header__container">
+        <img className="header__logo" src={logo} alt="Логотип проекта Mesto" />
         <Switch>
           <Route path="/sign-in">
             <Link className="header__button" to="sign-up" >
@@ -47,39 +47,26 @@ const Header = ({ loggedIn, email, onLogout }) => {
           </Route>
           <Route path="/">
             {loggedIn && (
-              <>
-                <button
-                  className="header__menu-button"
-                  type="button"
-                  style={{ backgroundImage: `url(${menuOpened ? close : burger})` }}
-                  onClick={toggleMenu}
-                />
-                <div className={`header__menu-auth ${!menuOpened && 'header__menu-auth_hidden'}`}>
-                  {email && <span className="header__auth-profile">{email}</span>}
-                  <Link className="header__button" to="/sign-in" onClick={handleLogout} >
-                    Выйти
-                  </Link>
-                </div>
-              </>
-            )}
-          </Route>
-        </Switch>
-      </div>
-    </header>
-  );
-}
-
-/*
-         <Route path="/">
-            {loggedIn && (
               <button
-                className="header__burger-button"
-                type="button"
+                className="header__menu-button"
                 style={{ backgroundImage: `url(${menuOpened ? close : burger})` }}
+                type="button"
                 onClick={toggleMenu}
               />
             )}
           </Route>
-*/
+        </Switch>
+      </div>
+      <div className={`header__menu-auth ${!menuOpened && 'header__menu-auth_hidden'}`}>
+        {email && <span className="header__email">{email}</span>}
+        {loggedIn && (
+          <Link className="header__button" to="/sign-in" onClick={handleLogout}>
+            Выйти
+          </Link>
+        )}
+      </div>
+    </header>
+  );
+}
 
 export default Header;

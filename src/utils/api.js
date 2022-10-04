@@ -37,7 +37,7 @@ export default class Api {
     setProfile(obj) {
         return this._request(`${this._baseUrl}/users/me`, {
             method: "PATCH",
-//            headers: this._headers,  //
+            headers: this._headers,
             body: JSON.stringify({
                 name: obj.name,
                 about: obj.about,

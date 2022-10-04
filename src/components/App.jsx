@@ -208,9 +208,9 @@ function App() {
   // Внутри этого обработчика вызовите api.setUserInfo  //
   // После завершения запроса обновите стейт currentUser из полученных данных и закройте все попапы  //
   
-//  const handleUpdateUser = async (obj) => {
+  const handleUpdateUser = async (obj) => {
 //  console.log(`handleUpdateUser obj: ${obj.name}, ${obj.about}, loggedIn: ${loggedIn}`);  //
-/*
+
     setIsLoading(true);
     try {
       const changedProfile = await api.setProfile(obj);
@@ -222,9 +222,8 @@ function App() {
       setIsLoading(false);      
     }
   }
-*/
 
-
+/*
 const handleUpdateUser = (obj) => {
   console.log(`handleUpdateUser obj: ${obj.name}, ${obj.about}, loggedIn: ${loggedIn}`);
   setIsLoading(true);
@@ -239,6 +238,7 @@ const handleUpdateUser = (obj) => {
         setIsLoading(false);
       });
   }
+  */
 
 
   const handleAddPlace = async (obj) => {
