@@ -4,10 +4,10 @@ import { useFormAndValidation } from '../hooks/useFormAndValidation.js';
 
 //  Проверяем email и password, если оба не false, то  //
 //  Запускаем onLogin Возвращаем форму логина  //
-function Login({ title, buttonText, onLogin }) {
+const Login = ({ title, buttonText, onLogin }) => {
   const { values, handleChange, errors, isValid } = useFormAndValidation({});
-    function handleSubmit(evt) {
-    evt.preventDefault();
+    const handleSubmit = (e) => {
+    e.preventDefault();
     const { email, password } = values;
     if (!email || !password) return;
     onLogin(email, password);

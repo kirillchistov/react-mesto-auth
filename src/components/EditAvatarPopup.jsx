@@ -1,11 +1,8 @@
 import React, {useRef} from 'react';
 import PopupWithForm from "./PopupWithForm";
-//  import {useForm} from "../hooks/useForm";  //  пока не используем //
 
 const EditAvatarPopup = ({ isOpen, onClose, onUpdateAvatar, isLoading }) => {
     const inputRef = useRef();
-//    const {values, handleChange, setValues} = useForm({});  //
-
     const handleSubmit = (e) => {
         e.preventDefault();
         onUpdateAvatar({

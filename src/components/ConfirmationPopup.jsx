@@ -1,15 +1,11 @@
-//  Компонент попапа для подтверждения удаления карточки  //
-
 import React from 'react';
 import PopupWithForm from './PopupWithForm';
-/* import {useForm} from "../hooks/useForm"; */
 
 //  Обработчик кнопки подтверждения вызывает функцию удаления и закрывает попап  //
 //  Карточка cardToDelete помечается на удаление при клике (в App.jsx)  // 
-function ConfirmationPopup({ isOpen, onClose, cardToDelete, onCardDelete, isLoading }) {
-//   const {values, handleChange, setValues} = useForm({});  //
-  function handleSubmit(event) {
-    event.preventDefault();
+const ConfirmationPopup = ({ isOpen, onClose, cardToDelete, onCardDelete, isLoading }) => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     onCardDelete(cardToDelete);
     onClose();
   }

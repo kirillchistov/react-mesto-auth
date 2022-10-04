@@ -1,13 +1,8 @@
 .header__menu-auth {
-/*
-    padding: 0 25px 0 25px;
-    text-align: left;
-*/   
     display: flex;
     justify-content: space-between;
     align-items: middle;
     column-gap: 24px;
-
 }
   
   @media screen and (max-width: 768px) {

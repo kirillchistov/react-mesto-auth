@@ -1,35 +1,27 @@
-//  Импортируем библиотеки  //
 import React, { useState } from 'react';
-//  import { useState, useEffect } from 'react';  //
 import { Switch, Route, Link } from 'react-router-dom';
-
-//  Импортируем логотип и бургер-меню для вставки в src  //
 import logo from '../images/logo-white.svg';
 import burger from '../images/header-menu.svg';
 import close from '../images/button-close.svg';
-
-
 
 //  Принимаем email и signOut, рендерим компонент JSX компонента шапки  //
 //  Меню будет отличаться в зависимости от состояния loggedIn, для мобильной версии - бургер  //
 const Header = ({ loggedIn, email, onLogout }) => {
   const [menuOpened, setMenuOpened] = useState(false);
 
-  //  console.log(`loggedIn / headerEmail: ${loggedIn} / ${headerEmail}`);  //
-
-  //  Переключатель состояния меню  
+  //  Переключатель состояния меню  //
   const toggleMenu = () => {
     setMenuOpened((state) => !state);
   };
 
+  //  Обработка выхода из залогиненного состояния  //  
   const handleLogout = () => {
     setMenuOpened(false);
     loggedIn = false;
     onLogout();
   };
 
-//  console.log(loggedIn, email);  //
-  
+  //  Орисовываем хедер с контекстным и мобильным меню  //
   return (
     <header className="header">
       <div className="header__container">

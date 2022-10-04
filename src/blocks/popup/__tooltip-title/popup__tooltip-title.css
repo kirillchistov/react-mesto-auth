@@ -1,7 +1,6 @@
 .popup__tooltip-title {
     max-width: 358px;
     margin: 32px calc((100% - 358px) / 2) 60px;
-    /* padding: 32px 0; */
     color: #000;
     font-size: 24px;
     line-height: 1.21;
@@ -11,7 +10,6 @@
   
   @media (max-width: 568px) {
     .popup__tooltip-title {
-      /* padding: 40px 0; */
       margin: 40px calc((100% - 282px)/2) 60px;
       font-size: 20px;
     }

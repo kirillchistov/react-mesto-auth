@@ -2,7 +2,7 @@ import React from 'react';
 import success from '../images/success.png';
 import fail from '../images/fail.png';
 
-function InfoTooltip({ popupText, isOpen, onClose, loggedIn }) {
+const InfoTooltip = ({ popupText, isOpen, onClose, loggedIn }) => {
   return (
     <div className={`popup ${isOpen ? 'popup_opened' : ''}`}>
       <div className="popup__container-tooltip">

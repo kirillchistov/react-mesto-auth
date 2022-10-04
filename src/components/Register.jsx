@@ -3,13 +3,11 @@ import { NavLink } from 'react-router-dom';
 import Form from './Form';
 import { useFormAndValidation } from '../hooks/useFormAndValidation.js';
 
-function Register({ title, buttonText, onRegister }) {
+const Register = ({ title, buttonText, onRegister }) => {
   const { values, handleChange, errors, isValid } = useFormAndValidation({});
-
-  function handleSubmit(evt) {
-    evt.preventDefault();
+  const handleSubmit = (e) => {
+    e.preventDefault();
     const { email, password } = values;
-
     onRegister(email, password);
   }
 

@@ -40,7 +40,7 @@ export default class Api {
             headers: this._headers,
             body: JSON.stringify({
                 name: obj.name,
-                about: obj.about,
+                about: obj.about
             })
         })
     }
@@ -51,7 +51,7 @@ export default class Api {
             method: "PATCH",
             headers: this._headers,
             body: JSON.stringify({
-                avatar: obj.avatar,
+                avatar: obj.avatar
             })
         })
     }
@@ -65,7 +65,7 @@ export default class Api {
     addLike(obj) {
         return this._request(`${this._baseUrl}/cards/${obj._id}/likes`, {
             method: "PUT",
-            headers: this._headers,
+            headers: this._headers
         })
     }
 
@@ -73,7 +73,7 @@ export default class Api {
     deleteLike(obj) {
         return this._request(`${this._baseUrl}/cards/${obj._id}/likes`, {
             method: "DELETE",
-            headers: this._headers,
+            headers: this._headers
         })
     }
 
@@ -84,7 +84,7 @@ export default class Api {
             headers: this._headers,
             body: JSON.stringify({
                 name: obj.name,
-                link: obj.link,
+                link: obj.link
             })
         })
     }
@@ -93,7 +93,7 @@ export default class Api {
     deleteCard(obj) {
         return this._request(`${this._baseUrl}/cards/${obj._id}`, {
             method: "DELETE",
-            headers: this._headers,
+            headers: this._headers
         })
     }
 }
@@ -102,7 +102,7 @@ export const api = new Api({
     baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-47',
     headers: {
         authorization: '7a2b5691-9c91-496f-b370-fd3cc1ce7210',
-        'Content-Type': 'application/json',
-    },
+        'Content-Type': 'application/json'
+    }
 });
   

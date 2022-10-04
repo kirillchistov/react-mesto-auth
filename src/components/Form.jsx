@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Form({ title, buttonText, handleSubmit, handleChange, values, errors, isValid }) {
+const Form = ({ title, buttonText, handleSubmit, handleChange, values, errors, isValid }) => {
   return (
     <form className="login__form form" onSubmit={handleSubmit} noValidate>
       <h2 className="login__form-title">{title}</h2>
