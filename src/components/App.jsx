@@ -110,25 +110,25 @@ function App() {
       .then((data) => {
         if (!data.token) return;
         localStorage.setItem('jwt', data.token);
+        setEmail(email);
         setLoggedIn(true);
         setMessage('Успешная авторизация');
-        console.log(currentUser, email, password, loggedIn);
+//         console.log(currentUser, email, password, loggedIn);  //
         setIsPopupOpen(true);
-        setTimeout(closeAllPopups, 12000);
+        setTimeout(closeAllPopups, 3000);
         history.push('/');
       })
       .catch(e => {
         setLoggedIn(false);
         setMessage('Что-то не так! Ещё раз.');
         setIsPopupOpen(true);
-        setTimeout(closeAllPopups, 12000);
+        setTimeout(closeAllPopups, 3000);
         console.log(`Ошибка авторизации: ${e}`);
       })
       .finally(() => {
         setIsLoading(false);
       })
   }
-
   //  Обрабатываем регистрацию - сохраняем логин на сервере, закрываем попап, шлем на логин  //
   //  Поправить текст на 'Вы успешно зарегистрировались' и 'Что-то пошло не так! Попробуйте ещё раз.'  //
   const handleRegister = (email, password) => {
@@ -159,7 +159,6 @@ function App() {
     setLoggedIn(false);
     setEmail('');
     history.push('/sign-in');
-    console.log(`loggedIn: ${loggedIn}, jwt: ${localStorage.getItem("jwt")}`);
   }
 
   //  Хук для получения профиля и карточек залогиненного юзера  //
@@ -208,22 +207,28 @@ function App() {
   //  Добавляем обработчик в соотв-вии с пропсом onUpdateUser компонента EditProfilePopup  //
   // Внутри этого обработчика вызовите api.setUserInfo  //
   // После завершения запроса обновите стейт currentUser из полученных данных и закройте все попапы  //
-  /*
-  const handleUpdateUser = async (obj) => {
+  
+//  const handleUpdateUser = async (obj) => {
+//  console.log(`handleUpdateUser obj: ${obj.name}, ${obj.about}, loggedIn: ${loggedIn}`);  //
+/*
+    setIsLoading(true);
     try {
       const changedProfile = await api.setProfile(obj);
       setCurrentUser(changedProfile);
       closeAllPopups();
     } catch (e) {
       console.log(`Ошибка обновления профиля: ${e}`);
+    } finally {
+      setIsLoading(false);      
     }
   }
-  */
+*/
 
-  const handleUpdateUser = (name, about) => {
-    setIsLoading(true);
-    console.log(`handleUpdateUser obj: ${name}, ${about}, loggedIn: ${loggedIn}`);
-    api.setProfile(name, about)
+
+const handleUpdateUser = (obj) => {
+  console.log(`handleUpdateUser obj: ${obj.name}, ${obj.about}, loggedIn: ${loggedIn}`);
+  setIsLoading(true);
+    api.setProfile(obj)
       .then((res) => {
         setCurrentUser(res);
       })
@@ -234,6 +239,7 @@ function App() {
         setIsLoading(false);
       });
   }
+
 
   const handleAddPlace = async (obj) => {
     setIsLoading(true);
@@ -375,6 +381,7 @@ function App() {
   //  Внутри Main добавляем императивные обработчики  //
   //  Оборачиваем JSX в провайдер контекста с currentUser  //
   //  Выносим JSX попапов в отдельные компоненты  //
+  
   
   return (
     <CurrentUserContext.Provider value={currentUser}>

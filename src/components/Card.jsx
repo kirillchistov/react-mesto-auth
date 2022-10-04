@@ -16,6 +16,12 @@ const Card = ({ link, name, likesCount, onCardClick, onCardLike, onCardDelete, c
   //  Определяем, есть ли у карточки лайк, поставленный текущим пользователем  //
   const isLiked = card.likes.some((i) => i._id === user._id);
 
+  /*
+  const handleCardClick = (card) => {
+    onCardClick(card); //записываем данные при клике в setSelectedCard
+  }
+  */
+
   const handleDeleteClick = () => {
     onCardDelete(card); //записываем данные при клике в cardToDelete
   }
@@ -33,7 +39,7 @@ const Card = ({ link, name, likesCount, onCardClick, onCardLike, onCardDelete, c
           onClick={handleDeleteClick}>
         </button>
       )}
-      <img className="element__image" src={link} alt={name} title={name} onClick={handleDeleteClick} />
+      <img className="element__image" src={link} alt={name} title={name} onClick={() => onCardClick(card)} />
       <h2 className="element__title">{name}</h2>
       <div className="element__like-container">
         <button className={`element__button-like ${isLiked && "element__button-like_active"}`}

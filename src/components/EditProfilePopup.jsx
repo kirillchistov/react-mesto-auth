@@ -7,21 +7,33 @@ import PopupWithForm from "./PopupWithForm";
 import { useFormAndValidation } from "../hooks/useFormAndValidation";
 
 const EditProfilePopup = ({isOpen, onClose, onUpdateUser, isLoading}) => {
-    
-    const {values, handleChange, errors, isValid, setValues} = useFormAndValidation({});
+
+    //  пока не передаем ['name', 'about']
+    const {values, setValues, handleChange, errors, isValid, setIsValid } = useFormAndValidation();
+
     //  Подписываемся на контекст  //
     const currentUser = useContext(CurrentUserContext);
+
     //  Cоздаем эффект для обновления стейта при изменении контекста  // 
 
     useEffect(() => {
-        setValues(currentUser);
-    }, [currentUser, isOpen]);
+        if (isOpen && currentUser.name && currentUser.about) {
+            setValues({name: currentUser.name, about: currentUser.about});
+        }
+        setIsValid(false)
+    //  resetForm();  //
+    }, [isOpen, currentUser.name, currentUser.about, setIsValid, setValues])
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        console.log(values.name, values.about, currentUser)
-        onUpdateUser(values.name, values.about);
-    }
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        onUpdateUser(values);  //
+        onUpdateUser({
+    /*
+        name: (isValid && values["name"]),
+        about: (isValid && values["about"])
+    */
+        });
+    };
 
 /*  Старая версия  
     const [name, setName] = useState('');
@@ -69,38 +81,39 @@ const EditProfilePopup = ({isOpen, onClose, onUpdateUser, isLoading}) => {
                 <input 
                     className={`popup__input popup__input_user_name ${errors.name ? 'popup__field-error_type' : ''}`}
                     type="text" 
-                    name="edit-button" 
+                    name="name" 
                     id="profile-name" 
                     placeholder="Введите имя пользователя" 
-                    required 
-                    minLength="2" 
+                    required
+                    autoComplete="off"
+                    minLength="1" 
                     maxLength="40" 
-                    value={values.name || ''} 
+                    value={values["name"] || ''} 
                     onChange={handleChange} 
                 />
                 <span 
-                  className={`popup__field-error profile-name-error ${
-                    errors.name ? 'popup__field-error_active' : ''
-                  }`}
-                >{errors.name}</span>
+                  className={`popup__field-error profile-name-error 
+                    ${ !isValid && 'popup__field-error_active' }`}
+                >{errors["name"]}</span>
             </label>
             <label className="popup__label">
                 <input 
                     className={`popup__input popup__input_user_job" ${errors.link ? 'popup__field-error_type' : ''}`} 
                     type="text"
-                    name="profileJob" 
+                    name="about" 
                     id="profile-job" 
-                    placeholder="Профессия" 
-                    required 
+                    placeholder="Профессия"
+                    required
+                    autoComplete="off"
                     minLength="2" 
                     maxLength="200" 
-                    value={values.about || ''} 
+                    value={values["about"] || ''} 
                     onChange={handleChange} 
                 />
                 <span 
-                    className={`popup__field-error profile-job-error" ${
-                        errors.about ? 'popup__field-error_active' : ''}`}
-                >{errors.about}</span>
+                    className={`popup__field-error profile-job-error" 
+                        ${!isValid && 'popup__field-error_active'}`}
+                >{errors["about"]}</span>
             </label>
             </fieldset>
         </PopupWithForm>

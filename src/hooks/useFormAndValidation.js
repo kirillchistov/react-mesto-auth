@@ -13,7 +13,7 @@ export const useFormAndValidation = (validity) => {
     setValues({ ...values, [name]: value });
     setErrors({ ...errors, [name]: e.target.validationMessage });
     const isFormToValidate = e.target.closest('.popup__form');
-    !!isFormToValidate && e.target.closest('.popup__form').checkValidity();
+    !!isFormToValidate && isFormToValidate.checkValidity();
   };
 
   //  Очищаем форму передаем в аргументы значения по умолчанию и зависимости  //
